@@ -65,7 +65,7 @@ public:
         }
     }
 
-    void OnPlayerVictimRewardAfter(Player* player, Player* /*victim*/, uint32& /*killer_title*/, uint32& /*victim_rank*/, float& honor_f) override
+    void OnPlayerVictimRewardAfter(Player* player, Player* /*victim*/, uint32& /*killer_title*/, int32& /*victim_rank*/, float& honor_f) override
     {
         if (sV->isVip(player) && sV->rateCustom)
         {
