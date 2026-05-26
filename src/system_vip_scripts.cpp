@@ -29,7 +29,7 @@ public:
             sWorldSessionMgr->SendServerMessage(SERVER_MSG_STRING, sV->getLoginMessage(player));
 
         if (sV->isVip(player))
-            ChatHandler(player->GetSession()).PSendSysMessage("VIP订阅剩余时间: |cff4CFF00% s|r", sV->getFormatedVipTime(player).c_str());
+            ChatHandler(player->GetSession()).PSendSysMessage("VIP订阅剩余时间: |cff4CFF00 %s|r", sV->getFormatedVipTime(player).c_str());
 
         sV->delExpireVip(player);
         if (sV->saveTeleport && sV->isVip(player))
