@@ -51,13 +51,33 @@ void SystemVip::LoadConfig() {
     saveTeleportAmount = sConfigMgr->GetOption<uint32>("SystemVip.SaveTeleportAmount", 5);
 }
 
-bool SystemVip::isVip(Player* player) {
+// bool SystemVip::isVip(Player* player) {
+//     uint32 accountId = player->GetSession()->GetAccountId();
+
+//     if (vipMap.count(accountId) == 0)
+//         return false;
+
+//     return time(nullptr) < vipMap[accountId];
+// }
+
+bool SystemVip::isVip(Player* player)
+{
     uint32 accountId = player->GetSession()->GetAccountId();
-
-    if (vipMap.count(accountId) == 0)
-        return false;
-
-    return time(nullptr) < vipMap[accountId];
+    auto it = vipMap.find(accountId);
+    if (it == vipMap.end() || it->second <= time(nullptr))
+    {
+        // 缓存缺失或过期，重新查库
+        QueryResult result = LoginDatabase.Query("SELECT `remaining` FROM `account_vip` WHERE `id` = {}", accountId);
+        if (!result)
+        {
+            vipMap.erase(accountId);
+            return false;
+        }
+        uint32 newTime = result->Fetch()[0].Get<uint32>();
+        vipMap[accountId] = newTime;
+        return newTime > time(nullptr);
+    }
+    return it->second > time(nullptr);
 }
 
 void SystemVip::addRemainingVipTime(Player* player) {
