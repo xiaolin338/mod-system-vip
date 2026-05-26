@@ -23,7 +23,7 @@ public:
     void OnPlayerLogin(Player* player) override
     {
         if (sConfigMgr->GetOption<bool>("SystemVip.Announce", false))
-            ChatHandler(player->GetSession()).SendSysMessage("本服务器运行着|cff4CFF00SystemVip|r模块。");
+            ChatHandler(player->GetSession()).SendSysMessage("本服务器已支持|cff4CFF00 Vip |r系统。");
 
         if (sV->isVip(player) && sV->loginAnnounce)
             sWorldSessionMgr->SendServerMessage(SERVER_MSG_STRING, sV->getLoginMessage(player));
