@@ -385,7 +385,8 @@ public:
             } while (result->NextRow());
         }
 
-        LOG_INFO("module", "正在加载VIP账户... 已加载{}个账户。", sV->vipMap.size());
+        //LOG_INFO("module", "正在加载VIP账户... 已加载{}个账户。", sV->vipMap.size());
+        LOG_INFO("module", "Loading vip accounts... {} accounts loaded.", sV->vipMap.size());
     }
 };
 // Add all scripts in one
