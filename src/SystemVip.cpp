@@ -23,11 +23,11 @@ void SystemVip::LoadConfig() {
 
     petEnable = sConfigMgr->GetOption<bool>("SystemVip.Pet", false);
     vipZone = sConfigMgr->GetOption<bool>("SystemVip.VipZone", false);
-    vipZoneMapId = sConfigMgr->GetOption<uint32>("SystemVip.HonorRate", 571);
-    vipZonePosX = sConfigMgr->GetOption<float>("SystemVip.HonorRate", 5804.15);
-    vipZonePosY = sConfigMgr->GetOption<float>("SystemVip.HonorRate", 624.771);
-    vipZonePosZ = sConfigMgr->GetOption<float>("SystemVip.HonorRate", 647.767);
-    vipZoneO = sConfigMgr->GetOption<float>("SystemVip.HonorRate", 1.64);
+    vipZoneMapId = sConfigMgr->GetOption<uint32>("SystemVip.VipZoneMapId", 571);
+    vipZonePosX = sConfigMgr->GetOption<float>("SystemVip.VipZoneCoorX", 5804.15);
+    vipZonePosY = sConfigMgr->GetOption<float>("SystemVip.VipZoneCoorY", 624.771);
+    vipZonePosZ = sConfigMgr->GetOption<float>("SystemVip.VipZoneCoorZ", 647.767);
+    vipZoneO = sConfigMgr->GetOption<float>("SystemVip.VipZoneOrien", 1.64);
     armorRep = sConfigMgr->GetOption<bool>("SystemVip.ArmorRep", false);
     bankEnable = sConfigMgr->GetOption<bool>("SystemVip.Bank", false);
     mailEnable = sConfigMgr->GetOption<bool>("SystemVip.Mail", false);
