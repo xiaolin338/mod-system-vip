@@ -1,13 +1,13 @@
 [worldserver]
 
 ########################################
-# SYSTEM VIP CONFIGURATION
+# 系统 VIP 配置
 ########################################
 #
 #    SystemVip.Announce
-#        Description: Habilita un mensaje de modulo al iniciar sesión.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 登录时启用模块消息。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Announce = 0
@@ -15,8 +15,8 @@ SystemVip.Announce = 0
 ########################################
 #
 #    SystemVip.TimeVip
-#        Description: Tiempo en días para añadir por cada suscripción.
-#        Default:     7
+#        描述: 每次订阅添加的 VIP 天数。
+#        默认:     7
 #
 
 SystemVip.TimeVip = 7
@@ -24,8 +24,8 @@ SystemVip.TimeVip = 7
 ########################################
 #
 #    SystemVip.Token
-#        Description: Token para comprar una suscripción VIP
-#        Default:    29736
+#        描述: 购买 VIP 订阅所需的代币 ID。
+#        默认:    29736
 #
 
 SystemVip.Token = 29736
@@ -33,8 +33,8 @@ SystemVip.Token = 29736
 ########################################
 #
 #    SystemVip.TokenAmount
-#        Description: Cantidad necesaria.
-#        Default:     10
+#        描述: 所需代币数量。
+#        默认:     10
 #
 
 SystemVip.TokenAmount = 10
@@ -42,20 +42,20 @@ SystemVip.TokenAmount = 10
 ########################################
 #
 #    SystemVip.TokenIcon
-#        Description: Ícono del token
-#        Default:     "|TInterface/ICONS/inv_misc_rune_05:15:15:-15:0|t"
+#        描述: 代币图标。
+#        默认:     "|TInterface/ICONS/inv_misc_rune_05:15:15:-15:0|t"
 #
 
 SystemVip.TokenIcon = "|TInterface/ICONS/inv_misc_rune_05:15:15:-15:0|t"
 
 ########################################
-# SYSTEM VIP ADVANTAGES CONFIGURATION
+# 系统 VIP 特权配置
 ########################################
 #
 #    SystemVip.LoginAnnounce
-#        Description: Activa un anuncio especial de bienvenida para usuarios VIP.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 为 VIP 用户启用特殊登录欢迎公告。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.LoginAnnounce = 0
@@ -63,8 +63,8 @@ SystemVip.LoginAnnounce = 0
 ########################################
 #
 #    SystemVip.LoginAnnounceMessage
-#        Description: Mensaje a mostrar en el mensaje de bienvenida. El símbolo %s es el nombre del jugador.
-#        Default:     "Player Vip: %s se ha conectado."
+#        描述: 登录欢迎公告中显示的消息。%s 会被替换为玩家名称。
+#        默认:     "Player Vip: %s se ha conectado."
 #
 
 SystemVip.LoginAnnounceMessage = "Player Vip: %s se ha conectado."
@@ -72,9 +72,9 @@ SystemVip.LoginAnnounceMessage = "Player Vip: %s se ha conectado."
 ########################################
 #
 #    SystemVip.EnableRateCustom
-#        Description: Activa tasas personalizadas para usuarios VIP
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 为 VIP 用户启用自定义倍率。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.EnableRateCustom = 0
@@ -82,8 +82,8 @@ SystemVip.EnableRateCustom = 0
 ########################################
 #
 #    SystemVip.RateXP
-#        Description: Define la cantidad de tasa de experiencia para usuarios VIP. Define 1 si deseas una tasa normal.
-#        Default:     1
+#        描述: 设置 VIP 用户的经验倍率。设为 1 表示正常倍率。
+#        默认:     1
 #
 
 SystemVip.RateXP = 1
@@ -91,8 +91,8 @@ SystemVip.RateXP = 1
 ########################################
 #
 #    SystemVip.ProfessionRate
-#        Description: Define la cantidad de tasa de profesiones para usuarios VIP. Define 1 si deseas una tasa normal.
-#        Default:     1
+#        描述: 设置 VIP 用户的专业技能倍率。设为 1 表示正常倍率。
+#        默认:     1
 #
 
 SystemVip.ProfessionRate = 1
@@ -100,8 +100,8 @@ SystemVip.ProfessionRate = 1
 ########################################
 #
 #    SystemVip.GoldRate
-#        Description: Define la cantidad de tasa de oro para usuarios VIP. Define 1 si deseas una tasa normal.
-#        Default:     1
+#        描述: 设置 VIP 用户的金币掉落倍率。设为 1 表示正常倍率。
+#        默认:     1
 #
 
 SystemVip.GoldRate = 1
@@ -109,8 +109,8 @@ SystemVip.GoldRate = 1
 ########################################
 #
 #    SystemVip.HonorRate
-#        Description: Define la cantidad de tasa para ganar honor para usuarios VIP. Define 1 si deseas una tasa normal.
-#        Default:     1
+#        描述: 设置 VIP 用户的荣誉获取倍率。设为 1 表示正常倍率。
+#        默认:     1
 #
 
 SystemVip.HonorRate = 1
@@ -118,21 +118,21 @@ SystemVip.HonorRate = 1
 ########################################
 #
 #    SystemVip.GhostMount
-#        Description: Activa una montura cuando el jugador VIP muere y se convierte en fantasma
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 当 VIP 玩家死亡变成幽灵时，为其提供一匹坐骑。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.GhostMount = 0
 
 ########################################
-# SYSTEM VIP PET CONFIGURATION
+# 系统 VIP 宠物配置
 ########################################
 #
 #    SystemVip.Pet
-#        Description: Activa la mascota para usuarios VIP.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 为 VIP 用户启用宠物。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Pet = 0
@@ -140,9 +140,9 @@ SystemVip.Pet = 0
 ########################################
 #
 #    SystemVip.VipZone
-#        Description: Activa un teletransportador hacia una zona especial para usuarios VIP.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用一个通往 VIP 专区的传送。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.VipZone = 0
@@ -150,8 +150,8 @@ SystemVip.VipZone = 0
 ########################################
 #
 #    SystemVip.VipZoneCoord
-#        Description: Coordenadas de la zona para usuarios VIP.
-#        Default:     "mapId;position_x;position_y;position_z;orientation"
+#        描述: VIP 专区的坐标。
+#        默认:     "mapId;position_x;position_y;position_z;orientation"
 #
 
 SystemVip.VipZoneMapId = 571
@@ -163,9 +163,9 @@ SystemVip.VipZoneOrien = 1.64
 ########################################
 #
 #    SystemVip.ArmorRep
-#        Description: "Activa una opción para reparar armaduras de forma gratuita para usuarios VIP.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 为 VIP 用户启用免费修理装备的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.ArmorRep = 0
@@ -173,9 +173,9 @@ SystemVip.ArmorRep = 0
 ########################################
 #
 #    SystemVip.Bank
-#        Description: "Activa una opción para abrir el banco.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用打开银行的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Bank = 0
@@ -183,9 +183,9 @@ SystemVip.Bank = 0
 ########################################
 #
 #    SystemVip.Mail
-#        Description: "Activa una opción para abrir correo.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用打开邮箱的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Mail = 0
@@ -193,9 +193,9 @@ SystemVip.Mail = 0
 ########################################
 #
 #    SystemVip.Buffs
-#        Description: "Activa una opción para buffs.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用施加增益效果的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Buffs = 0
@@ -203,8 +203,8 @@ SystemVip.Buffs = 0
 ########################################
 #
 #    SystemVip.BuffIds
-#        Description: IDs de los buffs a lanzar. Deben estar separados por una coma y sin espacios.
-#        Default:     "12312,123123,123123"
+#        描述: 要施加的增益效果 ID，用英文逗号分隔，不要有空格。
+#        默认:     "12312,123123,123123"
 #
 
 SystemVip.BuffIds = "25898,48469,42995,48169,48073,48161,53307,23735,23736,23737,23738,23766,23767,23768,23769"
@@ -212,9 +212,9 @@ SystemVip.BuffIds = "25898,48469,42995,48169,48073,48161,53307,23735,23736,23737
 ########################################
 #
 #    SystemVip.Refresh
-#        Description: Activa una opción para restaurar tu vida y maná.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用恢复生命值和法力值的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Refresh = 0
@@ -222,9 +222,9 @@ SystemVip.Refresh = 0
 ########################################
 #
 #    SystemVip.Sickness
-#        Description: Activa una opción para restaurar tu dolencia.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用消除疾病/虚弱状态的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Sickness = 0
@@ -232,9 +232,9 @@ SystemVip.Sickness = 0
 ########################################
 #
 #    SystemVip.Deserter
-#        Description: Activa una opción para quitar la marca de desertor.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用移除逃兵 debuff 的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.Deserter = 0
@@ -242,9 +242,9 @@ SystemVip.Deserter = 0
 ########################################
 #
 #    SystemVip.ResetInstance
-#        Description: Activa una opción para reiniciar los registros en mazmorras y bandas.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用重置地下城和团队副本进度的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.ResetInstance = 0
@@ -252,9 +252,9 @@ SystemVip.ResetInstance = 0
 ########################################
 #
 #    SystemVip.SaveTeleport
-#        Description: Activa una opción para guardar zonas para teletransporte.
-#        Default:     0 - Disabled
-#                     1 - Enabled
+#        描述: 启用保存位置用于传送的选项。
+#        默认:     0 - 禁用
+#                     1 - 启用
 #
 
 SystemVip.SaveTeleport = 0
@@ -262,9 +262,8 @@ SystemVip.SaveTeleport = 0
 ########################################
 #
 #    SystemVip.SaveTeleportAmount
-#        Description: Define la cantidad máxima de zonas permitidas para guardar.
-#        Default:     5
+#        描述: 允许保存的最大位置数量。
+#        默认:     5
 #
 
 SystemVip.SaveTeleportAmount = 5
-
