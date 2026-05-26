@@ -23,13 +23,13 @@ public:
     void OnPlayerLogin(Player* player) override
     {
         if (sConfigMgr->GetOption<bool>("SystemVip.Announce", false))
-            ChatHandler(player->GetSession()).SendSysMessage("This server is running the |cff4CFF00SystemVip |rmodule.");
+            ChatHandler(player->GetSession()).SendSysMessage("本服务器运行着|cff4CFF00SystemVip|r模块。");
 
         if (sV->isVip(player) && sV->loginAnnounce)
             sWorldSessionMgr->SendServerMessage(SERVER_MSG_STRING, sV->getLoginMessage(player));
 
         if (sV->isVip(player))
-            ChatHandler(player->GetSession()).PSendSysMessage("Tiempo de suscripcion vip disponible: |cff4CFF00%s|r", sV->getFormatedVipTime(player).c_str());
+            ChatHandler(player->GetSession()).PSendSysMessage("VIP订阅剩余时间: |cff4CFF00%s|r", sV->getFormatedVipTime(player).c_str());
 
         sV->delExpireVip(player);
         if (sV->saveTeleport && sV->isVip(player))
@@ -82,11 +82,11 @@ public:
     bool OnGossipHello(Player* player, Creature* creature)
     {
         ClearGossipMenuFor(player);
-        AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/INV_Misc_Coin_02:28:28:-15:0|t Suscripción Vip.", 0, 1, "Quieres suscribirte al sistema vip por 7 dias?\nPrecio: " + to_string(sV->TokenAmount) + "\n " + sV->TokenIcon + " " +sV->getItemLink(sV->TokenEntry, player), 0, false);
-        AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/INV_Misc_QuestionMark:28:28:-15:0|t Información.", 0, 2);
+        AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/INV_Misc_Coin_02:28:28:-15:0|t VIP订阅。", 0, 1, "你想要订阅7天VIP系统吗？\n价格: " + to_string(sV->TokenAmount) + "\n " + sV->TokenIcon + " " +sV->getItemLink(sV->TokenEntry, player), 0, false);
+        AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/INV_Misc_QuestionMark:28:28:-15:0|t 信息。", 0, 2);
         if(sV->isVip(player))
-            AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/ability_hunter_beastcall:28:28:-15:0|t Recuperar mi mascota VIP.", 0, 4);
-        AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/Trade_Engineering:28:28:-15:0|t Cerrar.", 0, 3);
+            AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/ability_hunter_beastcall:28:28:-15:0|t 取回我的VIP宠物。", 0, 4);
+        AddGossipItemFor(player, GOSSIP_ICON_TALK, "|TInterface/ICONS/Trade_Engineering:28:28:-15:0|t 关闭。", 0, 3);
         SendGossipMenuFor(player, 1, creature->GetGUID());
         return true;
     }
@@ -105,31 +105,31 @@ public:
                     if (!player->HasItemCount(44824, 1, true))
                         player->AddItem(44824, 1);
 
-                    ChatHandler(player->GetSession()).PSendSysMessage("Gracias por tu suscripcion vip.");
-                    ChatHandler(player->GetSession()).PSendSysMessage("Tiempo de suscripcion vip disponible: %s", sV->getFormatedVipTime(player).c_str());
+                    ChatHandler(player->GetSession()).PSendSysMessage("感谢你的VIP订阅。");
+                    ChatHandler(player->GetSession()).PSendSysMessage("VIP订阅剩余时间: %s", sV->getFormatedVipTime(player).c_str());
                     OnGossipSelect(player, creature, 0, 2);
                 }
                 else
                 {
-                    ChatHandler(player->GetSession()).PSendSysMessage("No tienes suficientes Tokens.");
+                    ChatHandler(player->GetSession()).PSendSysMessage("你的代币不足。");
                     CloseGossipMenuFor(player);
                 }
                 break;
             case 2:
                 sV->sendGossipInformation(player, true);
-                AddGossipItemFor(player, 0, "|TInterface/ICONS/Trade_Engineering:28:28:-15:0|t Cerrar.", 0, 3);
+                AddGossipItemFor(player, 0, "|TInterface/ICONS/Trade_Engineering:28:28:-15:0|t 关闭。", 0, 3);
                 SendGossipMenuFor(player, VENDOR_INFO, creature->GetGUID());
                 break;
             case 4:
                 if (!player->HasItemCount(44824, 1, true))
                 {
                     player->AddItem(44824, 1);
-                    creature->Whisper("No lo vuelvas a perder.", LANG_UNIVERSAL, player, false);
+                    creature->Whisper("别再弄丢了。", LANG_UNIVERSAL, player, false);
                     CloseGossipMenuFor(player);
                 }
                 else
                 {
-                    creature->Whisper("Ya tienes un item para invocar a tu mascota VIP.", LANG_UNIVERSAL, player, false);
+                    creature->Whisper("你已经有了召唤VIP宠物的物品。", LANG_UNIVERSAL, player, false);
                     OnGossipHello(player, creature);
                 }
                 break;
@@ -149,19 +149,19 @@ public:
     {
         if (!sV->isVip(player))
         {
-            ChatHandler(player->GetSession()).PSendSysMessage("No eres Vip!");
-            ChatHandler(player->GetSession()).PSendSysMessage("Por favor renueva tu suscription vip.");
+            ChatHandler(player->GetSession()).PSendSysMessage("你不是VIP！");
+            ChatHandler(player->GetSession()).PSendSysMessage("请续费你的VIP订阅。");
             return false;
         }
 
         /*if (player->IsInCombat()) {
-            ChatHandler(player->GetSession()).PSendSysMessage("Estas en combate!");
+            ChatHandler(player->GetSession()).PSendSysMessage("你正在战斗中！");
             return false;
         }*/
 
         if (player->GetMap()->IsBattleArena())
         {
-            ChatHandler(player->GetSession()).PSendSysMessage("No puedes usar en arena!");
+            ChatHandler(player->GetSession()).PSendSysMessage("你不能在竞技场中使用！");
             return false;
         }
 
@@ -198,29 +198,29 @@ public:
             return true;
 
         if(sV->vipZone)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/Achievement_Zone_ZulDrak_12:28:28:-15:0|t Vip Zone", 0, 1);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/Achievement_Zone_ZulDrak_12:28:28:-15:0|t VIP区域", 0, 1);
         if(sV->armorRep)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/INV_Hammer_20:28:28:-15:0|t Reparar armaduras.", 0, 2);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/INV_Hammer_20:28:28:-15:0|t 修理装备。", 0, 2);
         if(sV->bankEnable)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/INV_Ingot_03:28:28:-15:0|t Mi Banco.", 0, 3);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/INV_Ingot_03:28:28:-15:0|t 我的银行。", 0, 3);
         if(sV->mailEnable)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/inv_letter_15:28:28:-15:0|t Mi Correo.", 0, 8);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/inv_letter_15:28:28:-15:0|t 我的邮箱。", 0, 8);
         if (sV->buffsEnable)
         {
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/Spell_Magic_GreaterBlessingofKings:28:28:-15:0|t Buffs", 0, 4);
-            AddGossipItemFor(player, 0, "|TInterface/PAPERDOLLINFOFRAME/UI-GearManager-Undo:28:28:-15:0|t Remover Buffs", 0, 11);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/Spell_Magic_GreaterBlessingofKings:28:28:-15:0|t 增益", 0, 4);
+            AddGossipItemFor(player, 0, "|TInterface/PAPERDOLLINFOFRAME/UI-GearManager-Undo:28:28:-15:0|t 移除增益", 0, 11);
         }
         if(sV->refreshEnable)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/Spell_Holy_LayOnHands:28:28:-15:0|t Restaurar hp/mana.", 0, 5);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/Spell_Holy_LayOnHands:28:28:-15:0|t 恢复生命/法力。", 0, 5);
         if(sV->sicknessEnbale)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/spell_shadow_deathscream:28:28:-15:0|t Remover dolencia.", 0, 6);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/spell_shadow_deathscream:28:28:-15:0|t 移除疾病。", 0, 6);
         if(sV->deserterEnable)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/ability_druid_cower:28:28:-15:0|t Quitar dersertor.", 0, 7);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/ability_druid_cower:28:28:-15:0|t 移除逃亡者。", 0, 7);
         if(sV->resetInstance)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/Achievement_Dungeon_Icecrown_IcecrownEntrance:28:28:-15:0|t Reinicar instancias.", 0, 9);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/Achievement_Dungeon_Icecrown_IcecrownEntrance:28:28:-15:0|t 重置副本。", 0, 9);
         if(sV->saveTeleport)
-            AddGossipItemFor(player, 0, "|TInterface/ICONS/Spell_Holy_LightsGrace:28:28:-15:0|t Mi teleport.", 0, 10);
-        AddGossipItemFor(player, 0, "|TInterface/ICONS/Trade_Engineering:28:28:-15:0|t Cerrar.", 0, 100);
+            AddGossipItemFor(player, 0, "|TInterface/ICONS/Spell_Holy_LightsGrace:28:28:-15:0|t 我的传送。", 0, 10);
+        AddGossipItemFor(player, 0, "|TInterface/ICONS/Trade_Engineering:28:28:-15:0|t 关闭。", 0, 100);
 
         SendGossipMenuFor(player, PET_INFO, creature->GetGUID());
         return true;
@@ -233,7 +233,7 @@ public:
             case 1:
                 if (player->IsInCombat())
                 {
-                    ChatHandler(player->GetSession()).PSendSysMessage("Estás en combate!");
+                    ChatHandler(player->GetSession()).PSendSysMessage("你正在战斗中！");
                     CloseGossipMenuFor(player);
                 }
                 else
@@ -244,7 +244,7 @@ public:
                 break;
             case 2:
                 player->DurabilityRepairAll(false, 0, false);
-                ChatHandler(player->GetSession()).PSendSysMessage("Reparaste tus armaduras.");
+                ChatHandler(player->GetSession()).PSendSysMessage("你修理了装备。");
                 OnGossipHello(player, creature);
                 break;
             case 3:
@@ -255,46 +255,46 @@ public:
                     player->AddAura(sV->buffIds[i], player);
 
                 player->CastSpell(player, 16609);
-                ChatHandler(player->GetSession()).PSendSysMessage("Buffos para ti!");
+                ChatHandler(player->GetSession()).PSendSysMessage("给你增益效果！");
                 OnGossipHello(player, creature);
                 break;
             case 5:
                 if (player->IsInCombat())
                 {
                     CloseGossipMenuFor(player);
-                    ChatHandler(player->GetSession()).PSendSysMessage("Estás en combate!");
+                    ChatHandler(player->GetSession()).PSendSysMessage("你正在战斗中！");
                     return false;
                 }
                 else if (player->getPowerType() == POWER_MANA)
                     player->SetPower(POWER_MANA, player->GetMaxPower(POWER_MANA));
 
                 player->SetHealth(player->GetMaxHealth());
-                ChatHandler(player->GetSession()).PSendSysMessage("HP/MANA Restaurados!");
+                ChatHandler(player->GetSession()).PSendSysMessage("生命/法力已恢复！");
                 creature->CastSpell(player, 31726, true);
                 OnGossipHello(player, creature);
                 break;
             case 6:
                 if (player->HasAura(15007))
                     player->RemoveAura(15007);
-                ChatHandler(player->GetSession()).PSendSysMessage("Tu dolencia fué removido.");
+                ChatHandler(player->GetSession()).PSendSysMessage("你的疾病已被移除。");
                 creature->CastSpell(player, 31726, true);
                 OnGossipHello(player, creature);
                 break;
             case 7:
-                // remover desertor
+                // 移除逃亡者
                 if(player->HasAura(26013))
                     player->RemoveAura(26013);
-                ChatHandler(player->GetSession()).PSendSysMessage("Tu marca de desertor fué removido.");
+                ChatHandler(player->GetSession()).PSendSysMessage("你的逃亡者标记已被移除。");
                 creature->CastSpell(player, 31726);
                 OnGossipHello(player, creature);
                 break;
             case 8:
-                // mostrar correo
+                // 显示邮箱
                 CloseGossipMenuFor(player);
                 player->GetSession()->SendShowMailBox(creature->GetGUID());
                 break;
             case 9:
-                // reiniciar cds
+                // 重置副本冷却
                 for (uint8 i = 0; i < MAX_DIFFICULTY; ++i)
                 {
                     BoundInstancesMap const& m_boundInstances = sInstanceSaveMgr->PlayerGetBoundInstances(player->GetGUID(), Difficulty(i));
@@ -310,7 +310,7 @@ public:
                     }
                 }
 
-                ChatHandler(player->GetSession()).PSendSysMessage("Tus instancias fueron reinicidas!");
+                ChatHandler(player->GetSession()).PSendSysMessage("你的副本已被重置！");
                 creature->CastSpell(player, 59908);
                 OnGossipHello(player, creature);
                 return true;
@@ -324,13 +324,13 @@ public:
                 if (player->HasAura(16609))
                     player->RemoveAura(16609);
                 creature->CastSpell(player, 31726);
-                ChatHandler(player->GetSession()).PSendSysMessage("Buffos para ti!");
+                ChatHandler(player->GetSession()).PSendSysMessage("给你增益效果！");
                 OnGossipHello(player, creature);
                 break;
             case 10:
-                // Sistema teleports
-                AddGossipItemFor(player, 0, "|TInterface/GUILDBANKFRAME/UI-GuildBankFrame-NewTab:28:28:-15:0|t Añadir nuevo.", 0, 1, "Nombre para guardar sus coordenadas.", 0, true);
-                AddGossipItemFor(player, 0, "|TInterface/PAPERDOLLINFOFRAME/UI-GearManager-Undo:28:28:-15:0|t Eliminar.", 0, 2, "Nombre a eliminar.", 0, true);
+                // 传送系统
+                AddGossipItemFor(player, 0, "|TInterface/GUILDBANKFRAME/UI-GuildBankFrame-NewTab:28:28:-15:0|t 添加新的。", 0, 1, "用于保存坐标的名称。", 0, true);
+                AddGossipItemFor(player, 0, "|TInterface/PAPERDOLLINFOFRAME/UI-GearManager-Undo:28:28:-15:0|t 删除。", 0, 2, "要删除的名称。", 0, true);
                 sV->getTeleports(player);
                 SendGossipMenuFor(player, 1, creature->GetGUID());
                 break;
@@ -385,7 +385,7 @@ public:
             } while (result->NextRow());
         }
 
-        LOG_INFO("module", "Loading vip accounts... {} accounts loaded.", sV->vipMap.size());
+        LOG_INFO("module", "正在加载VIP账户... 已加载{}个账户。", sV->vipMap.size());
     }
 };
 // Add all scripts in one
