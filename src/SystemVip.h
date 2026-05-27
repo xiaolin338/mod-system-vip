@@ -10,8 +10,6 @@
 
 using namespace std;
 
-//#define NPC_TEXT 250000
-
 enum NPCTEXTS {
     VENDOR_INFO = 250000,
     PET_INFO
@@ -69,6 +67,10 @@ public:
     bool saveTeleport;
     uint32 saveTeleportAmount;
 
+    // 自动更新相关
+    bool EnableAutoUpdate;         // 是否启用自动更新
+    uint32 UpdateInterval;         // 更新间隔（秒）
+    time_t LastUpdateTime;         // 上次更新时间戳
 
     bool isVip(Player* player);
     void addRemainingVipTime(Player* player);
@@ -77,6 +79,7 @@ public:
     string getItemLink(uint32 entry, Player* player);
     void delExpireVip(Player* player);
     void LoadConfig();
+    void LoadVipDataFromDB();
     void sendGossipInformation(Player* player, bool advantages);
     string getInformationVip(Player* player);
     string getInformationAdavantages();
@@ -91,4 +94,4 @@ public:
 
 #define sSystemVip SystemVip::instance()
 
-#endif //SYSTEM_VIP_H
+#endif
