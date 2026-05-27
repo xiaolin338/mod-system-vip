@@ -156,7 +156,7 @@ public:
         if (!sV->isVip(player))
         {
             // ChatHandler(player->GetSession()).PSendSysMessage("你不是VIP！");
-            ChatHandler(player->GetSession()).PSendSysMessage("你的VIP订阅未订阅或已过!.");
+            ChatHandler(player->GetSession()).PSendSysMessage("你还没有订阅VIP服务或服务已过期,登录官网个人中心订阅或联系管理员!");
             return false;
         }
 
