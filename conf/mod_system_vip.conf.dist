@@ -67,7 +67,7 @@ SystemVip.LoginAnnounce = 1
 #        默认:     "VIP玩家 %s 已登录."
 #
 
-SystemVip.LoginAnnounceMessage = "Player Vip: %s se ha conectado."
+SystemVip.LoginAnnounceMessage = "VIP玩家 %s 已登录."
 
 ########################################
 #
@@ -284,7 +284,7 @@ SystemVip.EnableAutoUpdate = 1
 #
 #    SystemVip.UpdateInterval
 #        描述: 更新vip数据库时间。
-#        默认:     300(秒)
+#        默认:     60(秒)
 #
 
-SystemVip.UpdateInterval = 300
+SystemVip.UpdateInterval = 60
