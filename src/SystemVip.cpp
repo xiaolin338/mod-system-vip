@@ -13,7 +13,7 @@ void SystemVip::LoadConfig() {
     TokenIcon = sConfigMgr->GetOption<string>("SystemVip.TokenIcon", "|TInterface/ICONS/inv_misc_rune_05:15:15:-15:0|t ");
 
     loginAnnounce = sConfigMgr->GetOption<bool>("SystemVip.LoginAnnounce", false);
-    loginMessage = sConfigMgr->GetOption<string>("SystemVip.LoginAnnounceMessage", "VIP玩家 %s 已连接。");
+    loginMessage = sConfigMgr->GetOption<string>("SystemVip.LoginAnnounceMessage", "VIP玩家 %s 已登录.");
     rateCustom = sConfigMgr->GetOption<bool>("SystemVip.EnableRateCustom", false);
     rateXp = sConfigMgr->GetOption<uint32>("SystemVip.RateXP", 1);
     professionRate = sConfigMgr->GetOption<uint32>("SystemVip.ProfessionRate", 1);
@@ -49,14 +49,33 @@ void SystemVip::LoadConfig() {
     resetInstance = sConfigMgr->GetOption<bool>("SystemVip.ResetInstance", false);
     saveTeleport = sConfigMgr->GetOption<bool>("SystemVip.SaveTeleport", false);
     saveTeleportAmount = sConfigMgr->GetOption<uint32>("SystemVip.SaveTeleportAmount", 5);
+
+    // 自动更新配置
+    EnableAutoUpdate = sConfigMgr->GetOption<bool>("SystemVip.EnableAutoUpdate", false);
+    UpdateInterval = sConfigMgr->GetOption<uint32>("SystemVip.UpdateInterval", 300);
+    LastUpdateTime = time(nullptr);
+}
+
+void SystemVip::LoadVipDataFromDB() {
+    vipMap.clear();
+    QueryResult result = LoginDatabase.Query("SELECT id, subscription_date FROM account_vip");
+    if (result)
+    {
+        do
+        {
+            uint32 id = (*result)[0].Get<uint32>();
+            uint32 subDate = (*result)[1].Get<uint32>();
+            vipMap.emplace(id, subDate);
+        } while (result->NextRow());
+    }
+    LastUpdateTime = time(nullptr);
+    LOG_INFO("module", "VIP data reloaded from database. {} accounts loaded.", vipMap.size());
 }
 
 bool SystemVip::isVip(Player* player) {
     uint32 accountId = player->GetSession()->GetAccountId();
-
     if (vipMap.count(accountId) == 0)
         return false;
-
     return time(nullptr) < vipMap[accountId];
 }
 
@@ -75,6 +94,8 @@ void SystemVip::addRemainingVipTime(Player* player) {
 
 uint32 SystemVip::getRemainingVipTime(Player* player) {
     uint32 accountId = player->GetSession()->GetAccountId();
+    if (vipMap.count(accountId) == 0)
+        return 0;
     return time(nullptr) >= vipMap[accountId] ? 0 : vipMap[accountId] - time(nullptr);
 }
 
@@ -86,9 +107,8 @@ string SystemVip::getFormatedVipTime(Player* player) {
 
     hours = hours % 24;
     minutes = minutes % 60;
-    // int seconds = time % 60;
 
-    string result = to_string(days) + "天 " + to_string(hours) + "小时 " + to_string(minutes) + "分钟。";
+    string result = to_string(days) + "天 " + to_string(hours) + "小时 " + to_string(minutes) + "分钟.";
     return result;
 }
 
@@ -102,7 +122,6 @@ string SystemVip::getItemLink(uint32 entry, Player* player) {
     std::ostringstream oss;
     oss << "|c" << std::hex << ItemQualityColors[temp->Quality] << std::dec <<
         "|Hitem:" << entry << ":0:0:0:0:0:0:0:0:0|h[" << name << "]|h|r";
-
     return oss.str();
 }
 
@@ -111,7 +130,6 @@ string SystemVip::getInformationVip(Player* player) {
     std::string accName;
     if (AccountMgr::GetName(player->GetSession()->GetAccountId(), accName))
         text << "剩余时间: |CFF0DD617" << getFormatedVipTime(player) << "|r\n";
-
     return text.str();
 }
 
@@ -120,7 +138,7 @@ string SystemVip::getInformationAdavantages() {
     text << "福利:\n";
     text << "----------------------------------\n";
     if(loginAnnounce)
-        text << "|TInterface/ICONS/Spell_unused2:15:15:-10:-5|t 登录时公告。" << "\n";
+        text << "|TInterface/ICONS/Spell_unused2:15:15:-10:-5|t 登录时公告." << "\n";
     if (rateCustom) {
         text << "|TInterface/ICONS/Achievement_BG_KillXEnemies_GeneralsRoom:15:15:-10:-8|t 经验倍率           x " << rateXp << "\n";
         text << "|TInterface/ICONS/Achievement_BG_overcome500disadvantage:15:15:-10:-8|t 专业技能倍率  x " << professionRate << "\n";
@@ -128,29 +146,29 @@ string SystemVip::getInformationAdavantages() {
         text << "|TInterface/ICONS/Achievement_BG_kill_carrier_opposing_flagroom:15:15:-10::-8|t 荣誉倍率        x " << honorRate << "\n";
     }
     if(ghostMount)
-        text << "|TInterface/ICONS/ability_vanish:15:15:-10::-8|t 幽灵状态速度。" << "\n";
+        text << "|TInterface/ICONS/ability_vanish:15:15:-10::-8|t 幽灵状态速度." << "\n";
     if (petEnable) {
-        text << "|TInterface/ICONS/ability_hunter_beastcall:15:15:-10::-8|t VIP宠物。" << "\n";
+        text << "|TInterface/ICONS/ability_hunter_beastcall:15:15:-10::-8|t VIP宠物." << "\n";
         if(vipZone)
-            text << "|TInterface/ICONS/Achievement_Zone_ZulDrak_12:15:15:-10::-8|t VIP区域。" << "\n";
+            text << "|TInterface/ICONS/Achievement_Zone_ZulDrak_12:15:15:-10::-8|t VIP区域." << "\n";
         if(armorRep)
-            text << "|TInterface/ICONS/INV_Hammer_20:15:15:-10::-8|t 修理护甲。" << "\n";
+            text << "|TInterface/ICONS/INV_Hammer_20:15:15:-10::-8|t 修理护甲." << "\n";
         if(bankEnable)
-            text << "|TInterface/ICONS/INV_Ingot_03:15:15:-10::-8|t 个人银行。" << "\n";
+            text << "|TInterface/ICONS/INV_Ingot_03:15:15:-10::-8|t 个人银行." << "\n";
         if(mailEnable)
-            text << "|TInterface/ICONS/inv_letter_15:15:15:-10::-8|t 打开邮箱。" << "\n";
+            text << "|TInterface/ICONS/inv_letter_15:15:15:-10::-8|t 打开邮箱." << "\n";
         if(buffsEnable)
-            text << "|TInterface/ICONS/Spell_Magic_GreaterBlessingofKings:15:15:-10::-8|t VIP增益。" << "\n";
+            text << "|TInterface/ICONS/Spell_Magic_GreaterBlessingofKings:15:15:-10::-8|t VIP增益." << "\n";
         if(refreshEnable)
-            text << "|TInterface/ICONS/Spell_Holy_LayOnHands:15:15:-10::-8|t 恢复生命/法力。" << "\n";
+            text << "|TInterface/ICONS/Spell_Holy_LayOnHands:15:15:-10::-8|t 恢复生命/法力." << "\n";
         if(sicknessEnbale)
-            text << "|TInterface/ICONS/spell_shadow_deathscream:15:15:-10::-8|t 消除疾病。" << "\n";
+            text << "|TInterface/ICONS/spell_shadow_deathscream:15:15:-10::-8|t 消除疾病." << "\n";
         if(deserterEnable)
-            text << "|TInterface/ICONS/ability_druid_cower:15:15:-10::-8|t 消除逃亡者。" << "\n";
+            text << "|TInterface/ICONS/ability_druid_cower:15:15:-10::-8|t 消除逃亡者." << "\n";
         if(resetInstance)
-            text << "|TInterface/ICONS/Achievement_Dungeon_Icecrown_IcecrownEntrance:15:15:-10::-8|t 重置副本。" << "\n";
+            text << "|TInterface/ICONS/Achievement_Dungeon_Icecrown_IcecrownEntrance:15:15:-10::-8|t 重置副本." << "\n";
         if(saveTeleport)
-            text << "|TInterface/ICONS/Spell_Holy_LightsGrace:15:15:-10::-8|t 保存传送点。" << "\n";
+            text << "|TInterface/ICONS/Spell_Holy_LightsGrace:15:15:-10::-8|t 保存传送点." << "\n";
     }
     return text.str();
 }
@@ -163,23 +181,23 @@ void SystemVip::sendGossipInformation(Player* player, bool advantages) {
 
     if (isVip(player)) {
         text << "剩余时间: |CFF0DD617" << getFormatedVipTime(player) << "|r\n\n";
-        text << "感谢您购买VIP订阅。\n\n";
+        text << "感谢您购买VIP订阅.\n\n";
     }
     else {
-        text << "您没有可用的VIP订阅。\n";
+        text << "您没有可用的VIP订阅.\n";
         text << "购买订阅，享受所有VIP福利！\n";
     }
 
     if (advantages) {
-        text << "请记住，购买VIP后，您账户中的所有角色均可享受福利。" << "\n";
+        text << "请记住，购买VIP后，您账户中的所有角色均可享受福利." << "\n";
         text << getInformationAdavantages();
     }
 
     WorldPacket data(384, 100);
     if(advantages)
-        data << uint32_t(VENDOR_INFO); // id npc_text
+        data << uint32_t(VENDOR_INFO);
     else
-        data << uint32_t(PET_INFO); // id npc_text
+        data << uint32_t(PET_INFO);
     for (int i = 0; i < 10; ++i) {
         data << float(0.0f);
         data << std::string(text.str());
@@ -204,15 +222,12 @@ void SystemVip::delExpireVip(Player* player) {
     }
 }
 
-
 string SystemVip::getLoginMessage(Player* player) {
     string welcomeMessage = loginMessage;
     string name = player->GetName();
     size_t pos = welcomeMessage.find("%s");
-
-    if (pos != std::string::npos) {
+    if (pos != std::string::npos)
         welcomeMessage.replace(pos, 2, name);
-    }
     return welcomeMessage;
 }
 
@@ -239,7 +254,6 @@ void SystemVip::addTeleportVip(Player* player, string name) {
             ChatHandler(player->GetSession()).PSendSysMessage("无法保存更多传送点！");
             return;
         }
-
         for (size_t i = 0; i < teleportMap[accountId].size(); i++) {
             if (teleportMap[accountId][i].name == teleport.name) {
                 ChatHandler(player->GetSession()).PSendSysMessage("已存在同名传送点！");
@@ -251,7 +265,7 @@ void SystemVip::addTeleportVip(Player* player, string name) {
     teleport.id = id;
     teleportMap[accountId].push_back(teleport);
     LoginDatabase.Execute("INSERT INTO account_vip_teleport VALUES ( {} , '{}', {}, {}, {}, {}, {} );", accountId, name, teleport.mapId, teleport.coord_x, teleport.coord_y, teleport.coord_z, teleport.orientation);
-    ChatHandler(player->GetSession()).PSendSysMessage("位置保存成功。");
+    ChatHandler(player->GetSession()).PSendSysMessage("位置保存成功.");
 }
 
 void SystemVip::delTeleportVip(Player* player, string name) {
@@ -263,7 +277,7 @@ void SystemVip::delTeleportVip(Player* player, string name) {
             return;
         }
     }
-    ChatHandler(player->GetSession()).PSendSysMessage("名称错误。");
+    ChatHandler(player->GetSession()).PSendSysMessage("名称错误.");
 }
 
 void SystemVip::getTeleports(Player* player) {
@@ -284,6 +298,5 @@ void SystemVip::teleportPlayer(Player* player, uint32 id) {
             break;
         }
     }
-
     player->TeleportTo(teleport.mapId, teleport.coord_x, teleport.coord_y, teleport.coord_z, teleport.orientation);
 }
