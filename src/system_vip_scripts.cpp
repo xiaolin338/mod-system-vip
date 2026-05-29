@@ -16,6 +16,7 @@ public:
         PLAYERHOOK_ON_GIVE_EXP,
         PLAYERHOOK_ON_BEFORE_LOOT_MONEY,
         PLAYERHOOK_ON_PLAYER_RELEASED_GHOST,
+        PLAYERHOOK_ON_PLAYER_RESURRECT,
         PLAYERHOOK_ON_VICTIM_REWARD_AFTER
     }) { }
 
@@ -61,8 +62,16 @@ public:
     {
         if (sV->isVip(player) && sV->ghostMount)
         {
-            if (!player->HasAura(55164))
-                player->AddAura(55164, player);
+            if (!player->HasAura(551640))
+                player->AddAura(551640, player);
+        }
+    }
+
+    void OnPlayerResurrect(Player* player, float /*restorePercent*/, bool& /*applySickness*/) override
+    {
+        if (player->HasAura(551640))
+        {
+            player->RemoveAura(551640);
         }
     }
 
@@ -156,7 +165,7 @@ public:
         if (!sV->isVip(player))
         {
             // ChatHandler(player->GetSession()).PSendSysMessage("你不是VIP！");
-            ChatHandler(player->GetSession()).PSendSysMessage("你还没有订阅VIP服务或服务已过期,登录官网个人中心订阅或联系管理员!");
+            ChatHandler(player->GetSession()).PSendSysMessage("你还没有订阅VIP服务或服务已过期,登录官网个人中心订阅!");
             return false;
         }
 
@@ -251,6 +260,7 @@ public:
                 OnGossipHello(player, creature);
                 break;
             case 3:
+                creature->SetUInt32Value(UNIT_NPC_FLAGS, creature->GetUInt32Value(UNIT_NPC_FLAGS) | UNIT_NPC_FLAG_BANKER);
                 player->GetSession()->SendShowBank(creature->GetGUID());
                 break;
             case 4:
@@ -289,6 +299,7 @@ public:
                 OnGossipHello(player, creature);
                 break;
             case 8:
+                creature->SetUInt32Value(UNIT_NPC_FLAGS, creature->GetUInt32Value(UNIT_NPC_FLAGS) | UNIT_NPC_FLAG_MAILBOX);
                 CloseGossipMenuFor(player);
                 player->GetSession()->SendShowMailBox(creature->GetGUID());
                 break;
