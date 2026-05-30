@@ -23,7 +23,7 @@ public:
     void OnPlayerLogin(Player* player) override
     {
         if (sConfigMgr->GetOption<bool>("SystemVip.Announce", false))
-            ChatHandler(player->GetSession()).SendSysMessage("本服务器已支持|cff4CFF00 Vip |r系统.");
+            ChatHandler(player->GetSession()).SendSysMessage("服务器|cff4CFF00 Vip |r系统已启用.");
 
         if (sV->isVip(player) && sV->loginAnnounce)
             sWorldSessionMgr->SendServerMessage(SERVER_MSG_STRING, sV->getLoginMessage(player));
@@ -33,6 +33,11 @@ public:
             std::string remaining = sV->getFormatedVipTime(player);
             std::string msg = "VIP订阅剩余时间: |cff4CFF00" + remaining + "|r";
             ChatHandler(player->GetSession()).SendSysMessage(msg.c_str());
+
+            if (!player->HasItemCount(44824, 1, true))
+            {
+                player->AddItem(44824, 1);
+            }
         }
 
         sV->delExpireVip(player);
