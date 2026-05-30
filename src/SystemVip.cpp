@@ -233,7 +233,7 @@ string SystemVip::getLoginMessage(Player* player) {
 
 void SystemVip::loadTeleportVip(Player* player) {
     uint32 accountId = player->GetSession()->GetAccountId();
-    QueryResult result = LoginDatabase.Query("SELECT * FROM account_vip_teleport WHERE id = {};", accountId);
+    QueryResult result = CharacterDatabase.Query("SELECT * FROM account_vip_teleport WHERE id = {};", accountId);
     if (result) {
         uint32 i = 1;
         do
@@ -264,7 +264,7 @@ void SystemVip::addTeleportVip(Player* player, string name) {
     }
     teleport.id = id;
     teleportMap[accountId].push_back(teleport);
-    LoginDatabase.Execute("INSERT INTO account_vip_teleport VALUES ( {} , '{}', {}, {}, {}, {}, {} );", accountId, name, teleport.mapId, teleport.coord_x, teleport.coord_y, teleport.coord_z, teleport.orientation);
+    CharacterDatabase.Execute("INSERT INTO account_vip_teleport VALUES ( {} , '{}', {}, {}, {}, {}, {} );", accountId, name, teleport.mapId, teleport.coord_x, teleport.coord_y, teleport.coord_z, teleport.orientation);
     ChatHandler(player->GetSession()).PSendSysMessage("位置保存成功.");
 }
 
@@ -273,7 +273,7 @@ void SystemVip::delTeleportVip(Player* player, string name) {
     for (size_t i = 0; i < teleportMap[accountId].size(); i++) {
         if (teleportMap[accountId][i].name == name) {
             teleportMap[accountId].erase(teleportMap[accountId].begin() + i);
-            LoginDatabase.Execute("DELETE FROM account_vip_teleport WHERE id = {} AND name = '{}';", accountId, name);
+            CharacterDatabase.Execute("DELETE FROM account_vip_teleport WHERE id = {} AND name = '{}';", accountId, name);
             return;
         }
     }
